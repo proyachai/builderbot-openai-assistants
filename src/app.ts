@@ -4,11 +4,24 @@ import { MemoryDB } from '@builderbot/bot'
 import { BaileysProvider } from '@builderbot/provider-baileys'
 import { toAsk, httpInject } from "@builderbot-plugins/openai-assistants"
 import { typing } from "./utils/presence"
+import { getUserData } from "./utils/userData"
+// import { getAssistanId, saveAssistantId } from "./config/assistant"
 
 /** Puerto en el que se ejecutará el servidor */
 const PORT = process.env.PORT ?? 3008
 /** ID del asistente de OpenAI */
 const ASSISTANT_ID = process.env.ASSISTANT_ID ?? ''
+
+const handleToolConfigRequest = async (ctx: any, flowDynamic: any) => {
+    const userData = getUserData(ctx)
+    const response = `
+    **Datos de la persona que hace la consulta:**
+    - **Nombre:** ${userData.name || 'No disponible'}
+    - **Teléfono:** ${userData.phone || 'No disponible'}
+    - **Correo:** ${userData.email || 'No disponible'}
+    `
+    await flowDynamic([{ body: response }])
+}
 
 /**
  * Flujo de bienvenida que maneja las respuestas del asistente de IA
@@ -17,13 +30,19 @@ const ASSISTANT_ID = process.env.ASSISTANT_ID ?? ''
 const welcomeFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.WELCOME)
     .addAction(async (ctx, { flowDynamic, state, provider }) => {
         await typing(ctx, provider)
-        const response = await toAsk(ASSISTANT_ID, ctx.body, state)
+        const message = ctx.body.toLowerCase()
 
-        // Dividir la respuesta en chunks y enviarlos secuencialmente
-        const chunks = response.split(/\n\n+/)
-        for (const chunk of chunks) {
-            const cleanedChunk = chunk.trim().replace(/【.*?】/g, "");
-            await flowDynamic([{ body: cleanedChunk }])
+        if (message.includes("tool-config")) {
+            await handleToolConfigRequest(ctx, flowDynamic)
+        } else {
+            const response = await toAsk(ASSISTANT_ID, ctx.body, state)
+
+            // Dividir la respuesta en chunks y enviarlos secuencialmente
+            const chunks = response.split(/\n\n+/)
+            for (const chunk of chunks) {
+                const cleanedChunk = chunk.trim().replace(/【.*?】/g, "")
+                await flowDynamic([{ body: cleanedChunk }])
+            }
         }
     })
 
