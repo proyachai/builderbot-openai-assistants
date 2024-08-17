@@ -1,4 +1,4 @@
-// import axios from 'axios'
+import axios from 'axios'
 import dotenv from 'dotenv'
 import yup from 'yup'
 
@@ -20,37 +20,37 @@ const leadSchema = yup.object().shape({
     property_preferences: yup.string().required('Property preferences are required'),
 })
 
-// export const storeLead = async (lead: {
-//     name: string,
-//     phone: string,
-//     email: string,
-//     property_preferences: string,
-// }): Promise<any> => {
-//     try {
+export const storeLead = async (lead: {
+    name: string,
+    phone: string,
+    email: string,
+    property_preferences: string,
+}) => {
+    try {
 //         await leadSchema.validate(lead)
 
-//         const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Leads`
-//         const headers = {
-//             'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
-//             'Content-Type': 'application/json',
-//         }
+        const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Leads`
+        const headers = {
+            'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+        }
 
-//         const data = {
-//             records: [
-//                 {
-//                     fields: {
-//                         Name: lead.name,
-//                         Phone: lead.phone,
-//                         Email: lead.email,
-//                         'Property Preferences': lead.property_preferences,
-//                     },
-//                 },
-//             ],
-//         }
+        const data = {
+            records: [
+                {
+                    fields: {
+                        Name: lead.name,
+                        Phone: lead.phone,
+                        Email: lead.email,
+                        'Property Preferences': lead.property_preferences,
+                    },
+                },
+            ],
+        }
 
-//         const response = await axios.post(url, data, { headers })
-//         return response.data
-//     } catch (error) {
+        const response = await axios.post(url, data, { headers })
+        return response.data
+    } catch (error) {
 //         if (axios.isAxiosError(error)) {
 //             return `Failed to store lead: ${error.message}`
 //         } else if (error instanceof yup.ValidationError) {
@@ -58,5 +58,5 @@ const leadSchema = yup.object().shape({
 //         } else {
 //             return `An error occurred: ${error.message}`
 //         }
-//     }
-// }
+    }
+}
