@@ -1,15 +1,15 @@
 // import axios from 'axios'
-// import dotenv from 'dotenv'
+import dotenv from 'dotenv'
 // import yup from 'yup'
 
-// dotenv.config()
+dotenv.config()
 
-// const AIRTABLE_API_KEY = process.env.OPENAI_API_KEY
-// const AIRTABLE_BASE_ID = process.env.ASSISTANT_ID
+const AIRTABLE_API_KEY = process.env.OPENAI_API_KEY
+const AIRTABLE_BASE_ID = process.env.ASSISTANT_ID
 
-// if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
-//     throw new Error('Environment variables AIRTABLE_API_KEY or AIRTABLE_BASE_ID are missing.')
-// }
+if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
+    throw new Error('Environment variables AIRTABLE_API_KEY or AIRTABLE_BASE_ID are missing.')
+}
 
 // const leadSchema = yup.object().shape({
 //     name: yup.string().required('Name is required'),
