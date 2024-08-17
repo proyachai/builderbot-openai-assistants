@@ -1,6 +1,6 @@
 // import axios from 'axios'
 import dotenv from 'dotenv'
-// import yup from 'yup'
+import yup from 'yup'
 
 dotenv.config()
 
@@ -11,14 +11,14 @@ if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
     throw new Error('Environment variables AIRTABLE_API_KEY or AIRTABLE_BASE_ID are missing.')
 }
 
-// const leadSchema = yup.object().shape({
-//     name: yup.string().required('Name is required'),
-//     phone: yup.string()
-//         .matches(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format. Please provide a valid phone number.')
-//         .required('Phone is required'),
-//     email: yup.string().email('Invalid email format').required('Email is required'),
-//     property_preferences: yup.string().required('Property preferences are required'),
-// })
+const leadSchema = yup.object().shape({
+    name: yup.string().required('Name is required'),
+    phone: yup.string()
+        .matches(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format. Please provide a valid phone number.')
+        .required('Phone is required'),
+    email: yup.string().email('Invalid email format').required('Email is required'),
+    property_preferences: yup.string().required('Property preferences are required'),
+})
 
 // export const storeLead = async (lead: {
 //     name: string,
