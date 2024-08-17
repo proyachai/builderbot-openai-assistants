@@ -4,24 +4,11 @@ import { MemoryDB } from '@builderbot/bot'
 import { BaileysProvider } from '@builderbot/provider-baileys'
 import { toAsk, httpInject } from "@builderbot-plugins/openai-assistants"
 import { typing } from "./utils/presence"
-import { getUserData } from "./utils/userData"
-// import { getAssistanId, saveAssistantId } from "./config/assistant"
 
 /** Puerto en el que se ejecutará el servidor */
 const PORT = process.env.PORT ?? 3008
 /** ID del asistente de OpenAI */
 const ASSISTANT_ID = process.env.ASSISTANT_ID ?? ''
-
-const handleToolConfigRequest = async (ctx: any, flowDynamic: any) => {
-    const userData = getUserData(ctx)
-    const response = `
-    **Datos de la persona que hace la consulta:**
-    - **Nombre:** ${userData.name || 'No disponible'}
-    - **Teléfono:** ${userData.phone || 'No disponible'}
-    - **Correo:** ${userData.email || 'No disponible'}
-    `
-    await flowDynamic([{ body: response }])
-}
 
 /**
  * Flujo de bienvenida que maneja las respuestas del asistente de IA
@@ -30,19 +17,13 @@ const handleToolConfigRequest = async (ctx: any, flowDynamic: any) => {
 const welcomeFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.WELCOME)
     .addAction(async (ctx, { flowDynamic, state, provider }) => {
         await typing(ctx, provider)
-        const message = ctx.body.toLowerCase()
+        const response = await toAsk(ASSISTANT_ID, ctx.body, state)
 
-        if (message.includes("tool-config")) {
-            await handleToolConfigRequest(ctx, flowDynamic)
-        } else {
-            const response = await toAsk(ASSISTANT_ID, ctx.body, state)
-
-            // Dividir la respuesta en chunks y enviarlos secuencialmente
-            const chunks = response.split(/\n\n+/)
-            for (const chunk of chunks) {
-                const cleanedChunk = chunk.trim().replace(/【.*?】/g, "")
-                await flowDynamic([{ body: cleanedChunk }])
-            }
+        // Dividir la respuesta en chunks y enviarlos secuencialmente
+        const chunks = response.split(/\n\n+/)
+        for (const chunk of chunks) {
+            const cleanedChunk = chunk.trim().replace(/【.*?】/g, "");
+            await flowDynamic([{ body: cleanedChunk }])
         }
     })
 
