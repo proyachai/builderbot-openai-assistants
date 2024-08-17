@@ -4,7 +4,7 @@ import { MemoryDB } from '@builderbot/bot'
 import { BaileysProvider } from '@builderbot/provider-baileys'
 import { toAsk, httpInject } from "@builderbot-plugins/openai-assistants"
 import { typing } from "./utils/presence"
-import { storeLead } from "./utils/storeLead"
+// import { storeLead } from "./utils/storeLead"
 
 /** Puerto en el que se ejecutará el servidor */
 const PORT = process.env.PORT ?? 3008
@@ -20,15 +20,15 @@ const welcomeFlow = addKeyword<BaileysProvider, MemoryDB>(EVENTS.WELCOME)
         await typing(ctx, provider)
         const response = await toAsk(ASSISTANT_ID, ctx.body, state)
 
-        const leadData = {
-            name: "Juan",
-            phone: "+51 999 999 999",
-            email: "example@example.com",
-            property_preferences: "3-bedroom house in New York",
-        }
+        // const leadData = {
+        //     name: "Juan",
+        //     phone: "+51 999 999 999",
+        //     email: "example@example.com",
+        //     property_preferences: "3-bedroom house in New York",
+        // }
 
-        const result = await storeLead(leadData)
-        await flowDynamic([{ body: `Lead storage result: ${result}` }])
+        // const result = await storeLead(leadData)
+        // await flowDynamic([{ body: `Lead storage result: ${result}` }])
 
         // Dividir la respuesta en chunks y enviarlos secuencialmente
         const chunks = response.split(/\n\n+/)
