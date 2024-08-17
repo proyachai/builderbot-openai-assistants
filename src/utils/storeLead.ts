@@ -1,6 +1,6 @@
 import axios from 'axios'
-import * as dotenv from 'dotenv'
-import * as yup from 'yup'
+import dotenv from 'dotenv'
+import yup from 'yup'
 
 dotenv.config()
 
