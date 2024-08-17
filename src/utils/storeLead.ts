@@ -1,8 +1,8 @@
 import axios from 'axios'
-import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 // import yup from 'yup'
 
-dotenv.config()
+// dotenv.config()
 
 // const AIRTABLE_API_KEY = process.env.OPENAI_API_KEY
 // const AIRTABLE_BASE_ID = process.env.ASSISTANT_ID
